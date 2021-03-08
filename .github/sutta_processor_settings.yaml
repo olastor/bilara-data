@@ -10,6 +10,10 @@ bilara_variant_path: "${GITHUB_WORKSPACE}/variant"
 bilara_translation_path: "${GITHUB_WORKSPACE}/translation"
 reference_root_path: "${GITHUB_WORKSPACE}/reference/pli/ms"
 
+ms_yuttadhammo_path: "./sc-renumber-segments/data/ms_yuttadhammo"
+pali_concordance_filepath: "./sc-renumber-segments/data/all_pali_concordance.json"
+pali_canon_path: "~/ms_palicanon"
+
 exclude_dirs: ['name', 'xplayground', 'vri', 'site', 'blurb']
 exclude_filepath: './false_positives.yaml'
 
