@@ -1,4 +1,4 @@
-name: Check bilara data
+name: Run Sutta Processor on Push
 
 on:
   push:
