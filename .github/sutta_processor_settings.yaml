@@ -15,7 +15,7 @@ pali_concordance_filepath: "./sc-renumber-segments/data/all_pali_concordance.jso
 pali_canon_path: "~/ms_palicanon"
 
 exclude_dirs: ['name', 'xplayground', 'vri', 'site', 'blurb']
-exclude_filepath: '${GITHUB_WORKSPACE}/false_positives.yaml'
+exclude_filepath: '../${GITHUB_WORKSPACE}/false_positives.yaml'
 
 debug_dir: "."
 # Log level: [0, 50]. 10-debug, 20-info, 30-warning, 40-error, 50-critical
