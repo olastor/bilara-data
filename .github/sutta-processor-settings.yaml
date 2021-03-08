@@ -1,0 +1,18 @@
+---
+exec_module: 'bilara_check_variant'
+
+bilara_root_path: "${GITHUB_WORKSPACE}/root/"
+# Allows us to include more than just the Pali in the root tests
+bilara_root_langs: ['pli/ms/', 'lzh/']
+bilara_html_path: "${GITHUB_WORKSPACE}/html"
+bilara_comment_path: "${GITHUB_WORKSPACE}/comment"
+bilara_variant_path: "${GITHUB_WORKSPACE}/variant"
+bilara_translation_path: "${GITHUB_WORKSPACE}/translation"
+reference_root_path: "${GITHUB_WORKSPACE}/reference/pli/ms"
+
+exclude_dirs: ['name', 'xplayground', 'vri', 'site', 'blurb']
+exclude_filepath: './false_positives.yaml'
+
+debug_dir: "."
+# Log level: [0, 50]. 10-debug, 20-info, 30-warning, 40-error, 50-critical
+log_level: 30
