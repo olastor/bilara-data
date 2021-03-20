@@ -18,11 +18,6 @@ jobs:
       PYTHON_VERSION: 3.7.5
         
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v2.2.1
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
       - name: Checkout ${{ env.FROM_REPO }} repo
         uses: actions/checkout@v2
         with:
@@ -30,3 +25,17 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.FROM_REPO_BRANCH }}
           path: from-repo
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Python Dependencies
+        run: pip install -r from-repo/nilakkhana/requirements.txt
+
+      - name: Install Pre-commit hook
+        run: pre-commit install
+
+      - name: Run Pre-commit Hook
+        run: pre-commit run --hook-stage manual [nilakkhana-transform]

@@ -1,23 +1,7 @@
-default_stages : ['post-checkout']
+default_stages : ['manual']
 repos:
   - repo: local
     hooks:
-      - id: install-python-dependencies
-        name: Install Python Dependencies
-        description: Install Python dependencies for Nilakkhana
-        language: python
-        verbose: true
-        require_serial: true
-        pass_filenames: false
-        entry: pip install -r ./nilakkhana/requirements.txt
-      - id: install-hook
-        name: Install pre-commit hook
-        description: Install the pre-commit hook so the next step can run
-        language: python
-        verbose: true
-        require_serial: true
-        pass_filenames: false
-        entry: pre-commit install
       - id: nilakkhana-transform
         name: Perform Nilakkhana Transformation
         description: Run Nilakkhana Parse only on changed files
