@@ -25,4 +25,4 @@ repos:
         types: [ "json" ]
         verbose: true
         require_serial: true
-        entry: python ./nilakkhana/post-checkout-parse.py
+        entry: python ./nilakkhana/post-checkout-parse.py -f

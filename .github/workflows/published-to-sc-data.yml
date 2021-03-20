@@ -1,9 +1,9 @@
-name: Move published bilara data to sc-data
+name: Test new GitHub Action workflow
 
 on:
   push:
     branches:
-      - published
+      - feature/bilara-to-sc-action
 
 jobs:
   move-data-with-nilakkhana-transform:
@@ -18,6 +18,11 @@ jobs:
       PYTHON_VERSION: 3.7.5
         
     steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
       - name: Checkout ${{ env.FROM_REPO }} repo
         uses: actions/checkout@v2
         with:
@@ -25,42 +30,3 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.FROM_REPO_BRANCH }}
           path: from-repo
-
-      - name: Checkout ${{ env.TO_REPO }} repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.TO_REPO }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ env.TO_REPO_BRANCH }}
-          path: to-repo
-
-      - name: Setup Python
-        uses: actions/setup-python@v2.2.1
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install python dependencies
-        run: pip install -r from-repo/nilakkhana/requirements.txt
-
-      - name: Perform Nilakkhana transformation
-        run: python from-repo/nilakkhana/parse.py
-
-      - name: Create target directory if not exists
-        run: mkdir -p to-repo/$TO_REPO_TARGET_FOLDER
-
-      - name: Remove from-repo README.md
-        run: |
-          cd from-repo
-          rm README.md
-
-      - name: Copy changed files to the target directory
-        run: cp -r from-repo/* to-repo/$TO_REPO_TARGET_FOLDER/
-
-      - name: Push ${{ env.TO_REPO }}
-        run: |
-          cd to-repo
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "From bilara published"
-          git push
