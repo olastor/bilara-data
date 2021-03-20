@@ -1,0 +1,21 @@
+repos:
+  - repo: local
+    hooks:
+      - id: install-python-dependencies
+        name: Install Python Dependencies
+        description: Install Python dependencies for Nilakkhana
+        language: python
+        verbose: true
+        require_serial: true
+        pass_filenames: false
+        stages: ['post-checkout']
+        entry: pip install -r ./nilakkhana/requirements.txt
+      - id: nilakkhana-transform
+        name: Perform Nilakkhana Transformation
+        description: Run Nilakkhana Parse only on changed files
+        language: python
+        types: [ "json" ]
+        verbose: true
+        require_serial: true
+        stages: ['post-checkout']
+        entry: python ./nilakkhana/post-checkout-parse.py
