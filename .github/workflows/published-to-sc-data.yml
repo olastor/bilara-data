@@ -43,8 +43,12 @@ jobs:
       - name: Install Python Dependencies
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
-      - name: Run Pre-commit Hook
-        uses: pre-commit/action@v2.0.0
-        with:
-          extra_args: --hook-stage manual [nilakkhana-transform]
-          path: from-repo
+      - name: Install Pre-commit hook
+        run: pre-commit install
+        working-directory: from-repo
+
+
+      #- name: Run Pre-commit Hook
+      #  uses: pre-commit/action@v2.0.0
+      #  with:
+      #    extra_args: --hook-stage manual [nilakkhana-transform]
