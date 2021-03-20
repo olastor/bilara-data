@@ -43,10 +43,13 @@ jobs:
       - name: Install Python Dependencies
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
-      - name: Install Pre-commit Hook
-        run: pre-commit install
-        working-directory: from-repo
+      - name: Get changed file names
+        run: git diff-tree --no-commit-id --name-only -r $GITHUB_SHA
 
-      - name: Run Pre-commit Hook
-        run: pre-commit run --hook-stage post-checkout nilakkhana-transform
-        working-directory: from-repo
+      #- name: Install Pre-commit Hook
+      #  run: pre-commit install
+      #  working-directory: from-repo
+
+      #- name: Run Pre-commit Hook
+      #  run: pre-commit run --hook-stage post-checkout nilakkhana-transform
+      #  working-directory: from-repo
