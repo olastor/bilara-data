@@ -48,11 +48,5 @@ jobs:
         working-directory: from-repo
 
       - name: Run Pre-commit Hook
-        run: pre-commit run --hook-stage manual nilakkhana-transform
+        run: pre-commit run --hook-stage post-checkout nilakkhana-transform
         working-directory: from-repo
-
-
-      #- name: Run Pre-commit Hook
-      #  uses: pre-commit/action@v2.0.0
-      #  with:
-      #    extra_args: --hook-stage manual [nilakkhana-transform]

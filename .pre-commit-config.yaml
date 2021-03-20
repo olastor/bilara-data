@@ -1,4 +1,4 @@
-default_stages : ['manual']
+default_stages : ['post-checkout']
 repos:
   - repo: local
     hooks:
