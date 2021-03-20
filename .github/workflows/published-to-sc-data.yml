@@ -45,6 +45,7 @@ jobs:
 
       - name: Get changed file names
         run: git diff-tree --no-commit-id --name-only -r $GITHUB_SHA
+        working-directory: from-repo
 
       #- name: Install Pre-commit Hook
       #  run: pre-commit install
