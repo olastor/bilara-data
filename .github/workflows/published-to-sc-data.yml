@@ -11,7 +11,7 @@ jobs:
     
     env:
       FROM_REPO: suttacentral/bilara-data
-      FROM_REPO_BRANCH: published
+      FROM_REPO_BRANCH: feature/bilara-to-sc-action
       TO_REPO: suttacentral/sc-data
       TO_REPO_BRANCH: master
       TO_REPO_TARGET_FOLDER: sc_bilara_data
