@@ -45,11 +45,12 @@ jobs:
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
       - name: Get changed file names
+        id: files
         run: echo "::set-output name=changed_files::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)"
         working-directory: from-repo
 
       - name: Print changed file name
-        run: echo "${{ steps.vars.outputs.changed_files }}"
+        run: echo "${{ steps.files.outputs.changed_files }}"
 
       - name: Run Nilakkhana Transform on changed files
         run: python nilakkhana/post_checkout_parse.py -f ${{ steps.vars.outputs.changed_files }}
