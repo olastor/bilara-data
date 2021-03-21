@@ -20,6 +20,7 @@ def update_file_content(file_content: Dict[str, str]) -> Dict[str, str]:
 
 if __name__ == '__main__':
     changed_files = args.files
+    print(f"Received changed files in Nilakkhana: {changed_files}")
     for file in changed_files:
         print(f'{file} folder in progress')
         with open(file, 'r+', encoding='utf-8') as target_file:
