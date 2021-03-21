@@ -51,8 +51,8 @@ jobs:
           echo "::set-output name=changed_files::";
         working-directory: from-repo
 
-      - name: Print changed file name
-        run: echo "${{ steps.files.outputs.changed_files[@] }}"
+      #- name: Print changed file name
+      #  run: echo "${{ steps.files.outputs.changed_files[@] }}"
 
       - name: Run Nilakkhana Transform on changed files
         run: python nilakkhana/post_checkout_parse.py -f ${{ steps.files.outputs.changed_files }}
