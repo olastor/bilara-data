@@ -45,8 +45,11 @@ jobs:
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
       - name: Get changed file names
-        run: echo $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)
+        run: echo "CHANGED_FILES=echo $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)" >> $GITHUB_ENV
         working-directory: from-repo
+
+      - name: Print changed file name
+        run: echo ${{ env.CHANGED_FILES }}
 
       #- name: Install Pre-commit Hook
       #  run: pre-commit install
