@@ -19,7 +19,8 @@ def update_file_content(file_content: Dict[str, str]) -> Dict[str, str]:
 
 
 if __name__ == '__main__':
-    changed_files = args.files
+    unfiltered_files = args.files
+    changed_files = [f for f in unfiltered_files if f.suffix == '.json']
     print(f"Received changed files in Nilakkhana: {changed_files}")
     for file in changed_files:
         print(f'{file} folder in progress')
