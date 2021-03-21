@@ -5,7 +5,7 @@ from typing import Dict
 
 from parser import parse
 
-# Set up argparse to get the files passed by pre-commit
+# Set up argparse to get the files passed by git diff-tree
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('-f', '--files', required=True, type=Path, nargs='*')
 args = arg_parser.parse_args()
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     changed_files = [f for f in unfiltered_files if f.suffix == '.json']
     print(f"Received changed files in Nilakkhana: {changed_files}")
     for file in changed_files:
-        print(f'{file} folder in progress')
+        print(f'{file} file in progress')
         with open(file, 'r+', encoding='utf-8') as target_file:
             data = json.load(target_file)
             data = update_file_content(data)

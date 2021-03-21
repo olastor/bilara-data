@@ -41,23 +41,9 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
 
-      - name: Install Python Dependencies
+      - name: Install Python dependencies
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
-      #- name: Get changed file names
-      #  id: files
-      #  run: |
-      #    mapfile -t file_arr < <( git diff-tree --no-commit-id --name-only -r $GITHUB_SHA );
-      #    echo "::set-output name=changed_files::${file_arr}";
-      #  working-directory: from-repo
-
-      #- name: Print changed file name
-      #  run: echo "${{ steps.files.outputs.changed_files[@] }}"
-
-      #- name: Run Nilakkhana Transform on changed files
-      #  run: python nilakkhana/post_checkout_parse.py -f ${{ steps.files.outputs.changed_files }}
-      #  working-directory: from-repo
-
-      - name: Run Nilakkhana Transform on changed files
+      - name: Run Nilakkhana transform only on changed files
         run: python nilakkhana/post_checkout_parse.py -f $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)
         working-directory: from-repo
