@@ -48,7 +48,7 @@ jobs:
         id: files
         run: |
           mapfile -t file_arr < <( git diff-tree --no-commit-id --name-only -r $GITHUB_SHA );
-          echo "::set-output name=changed_files::";
+          echo "::set-output name=changed_files::file_arr";
         working-directory: from-repo
 
       #- name: Print changed file name
