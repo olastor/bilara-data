@@ -24,7 +24,7 @@ jobs:
           repository: ${{ env.FROM_REPO }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.FROM_REPO_BRANCH }}
-          # fetch-depth: 2
+          fetch-depth: 2
           path: from-repo
 
       - name: Setup Python
