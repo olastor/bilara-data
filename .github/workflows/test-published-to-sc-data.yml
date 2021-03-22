@@ -57,7 +57,8 @@ jobs:
           rm README.md
 
       - name: Copy changed files to the target directory
-        run: cp $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json') to-repo/$TO_REPO_TARGET_FOLDER/
+        run: cp $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json') ../to-repo/$TO_REPO_TARGET_FOLDER/
+        working-directory: from-repo
 
       - name: Push ${{ env.TO_REPO }}
         run: |
