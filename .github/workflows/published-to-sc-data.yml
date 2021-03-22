@@ -13,7 +13,7 @@ jobs:
       FROM_REPO: suttacentral/bilara-data
       FROM_REPO_BRANCH: feature/bilara-to-sc-action
       TO_REPO: suttacentral/sc-data
-      TO_REPO_BRANCH: master
+      TO_REPO_BRANCH: research/test-for-pushing
       TO_REPO_TARGET_FOLDER: sc_bilara_data
       PYTHON_VERSION: 3.7.5
         
@@ -45,5 +45,18 @@ jobs:
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
       - name: Run Nilakkhana transform only on changed files
-        run: python nilakkhana/post_checkout_parse.py -f $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA)
+        run: python nilakkhana/post_checkout_parse.py -f $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
         working-directory: from-repo
+
+      - name: Copy changed files to the target directory
+        run: cp -r $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json') to-repo/$TO_REPO_TARGET_FOLDER/
+        working-directory: from-repo
+
+      - name: Push ${{ env.TO_REPO }}
+        run: |
+          cd to-repo
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "From new test workflow"
+          git push
