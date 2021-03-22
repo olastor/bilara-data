@@ -27,6 +27,14 @@ jobs:
           fetch-depth: 2
           path: from-repo
 
+      - name: Checkout ${{ env.TO_REPO }} repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.TO_REPO }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ref: ${{ env.TO_REPO_BRANCH }}
+          path: to-repo
+
       - name: Setup Python
         uses: actions/setup-python@v2.2.1
         with:
