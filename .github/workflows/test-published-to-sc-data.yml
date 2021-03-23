@@ -52,10 +52,12 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
+      - name: Get changed files
+        id: changed-files
+        run: echo ::set-env name=FILES::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+
       - name: Run Nilakkhana transform only on changed files
-        env:
-          FILES: $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
-        run: python nilakkhana/post_checkout_parse.py -f $FILES
+        run: python nilakkhana/post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: from-repo
 
       - name: Create target directory if not exists
@@ -66,9 +68,7 @@ jobs:
         working-directory: from-repo
 
       - name: Copy changed files to the target directory
-        env:
-          FILES: $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
-        run: for f in $FILES; do echo `dirname $f`; echo `basename $f`; done
+        run: for f in ${{ steps.changed-files.outputs.FILES }}; do echo `dirname $f`; echo `basename $f`; done
         working-directory: from-repo
 
       - name: Push ${{ env.TO_REPO }}
