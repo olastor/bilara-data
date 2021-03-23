@@ -72,7 +72,7 @@ jobs:
             echo `dirname $f`
             echo `basename $f`
             mkdir -p $TO_REPO_TARGET_FOLDER/$(dirname $f)
-            cp ../from-repo/$f $TO_REPO_TARGET_FOLDER/$(basename $f)
+            cp ../from-repo/$f $TO_REPO_TARGET_FOLDER/$(dirname $f)/
           done
         working-directory: to-repo
 
