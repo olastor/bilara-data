@@ -61,25 +61,28 @@ jobs:
         run: python nilakkhana/post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: from-repo
 
-      - name: Create target directory if not exists
-        run: mkdir -p to-repo/$TO_REPO_TARGET_FOLDER
-
       - name: Remove from-repo README.md
         run: rm README.md
         working-directory: from-repo
 
       - name: Copy changed files to the target directory
-        run: for f in ${{ steps.changed-files.outputs.FILES }}; do echo `dirname $f`; echo `basename $f`; done
-        working-directory: from-repo
+        run: |
+          for f in ${{ steps.changed-files.outputs.FILES }}
+          do
+            echo `dirname $f`
+            echo `basename $f`
+            mkdir -p $TO_REPO_TARGET_FOLDER/(dirname $f)
+            cp $f $TO_REPO_TARGET_FOLDER/(dirname $f)
+          done
+        working-directory: to-repo
 
-#      - name: Push ${{ env.TO_REPO }}
-#        run: |
-#          pwd
-#          ls -al
-#          git config user.name github-actions
-#          git config user.email github-actions@github.com
-#          git add .
-#          git commit -m "From new test workflow"
-#          git push
-#        working-directory: to-repo
-# cp  ../to-repo/$TO_REPO_TARGET_FOLDER/
+      - name: Push ${{ env.TO_REPO }}
+        run: |
+          pwd
+          ls -al
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "From new test workflow"
+          git push
+        working-directory: to-repo
