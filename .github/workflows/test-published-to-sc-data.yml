@@ -71,15 +71,13 @@ jobs:
           do
             echo `dirname $f`
             echo `basename $f`
-            mkdir -p $TO_REPO_TARGET_FOLDER/(dirname $f)
-            cp $f $TO_REPO_TARGET_FOLDER/(dirname $f)
+            mkdir -p $TO_REPO_TARGET_FOLDER/$(dirname $f)
+            cp $f $TO_REPO_TARGET_FOLDER/$(basename $f)
           done
         working-directory: to-repo
 
       - name: Push ${{ env.TO_REPO }}
         run: |
-          pwd
-          ls -al
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
