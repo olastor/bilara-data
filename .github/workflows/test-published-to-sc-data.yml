@@ -53,7 +53,9 @@ jobs:
         run: pip install -r from-repo/nilakkhana/requirements.txt
 
       - name: Run Nilakkhana transform only on changed files
-        run: python nilakkhana/post_checkout_parse.py -f $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        env:
+          FILES: $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        run: python nilakkhana/post_checkout_parse.py -f $FILES
         working-directory: from-repo
 
       - name: Create target directory if not exists
@@ -64,7 +66,9 @@ jobs:
         working-directory: from-repo
 
       - name: Copy changed files to the target directory
-        run: cp $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json') ../to-repo/$TO_REPO_TARGET_FOLDER/
+        env:
+          FILES: $(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        run: for f in $FILES; do echo `dirname $f`; echo `basename $f`; done
         working-directory: from-repo
 
       - name: Push ${{ env.TO_REPO }}
@@ -77,3 +81,4 @@ jobs:
           git commit -m "From new test workflow"
           git push
         working-directory: to-repo
+# cp  ../to-repo/$TO_REPO_TARGET_FOLDER/
