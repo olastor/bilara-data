@@ -16,7 +16,7 @@ jobs:
       TO_REPO_BRANCH: research/test-for-pushing
       TO_REPO_TARGET_FOLDER: sc_bilara_data
       TEST_REPO: suttacentral/sc-renumber-segments
-      TEST_REPO_BRNACH: research/per-file-tests
+      TEST_REPO_BRANCH: research/per-file-tests
       PYTHON_VERSION: 3.7.5
         
     steps:
@@ -37,7 +37,7 @@ jobs:
           ref: ${{ env.TO_REPO_BRANCH }}
           path: to-repo
 
-      - name: Checkout ${{ env.TO_REPO }} repo
+      - name: Checkout ${{ env.TEST_REPO }} repo
         uses: actions/checkout@v2
         with:
           repository: ${{ env.TEST_REPO }}
