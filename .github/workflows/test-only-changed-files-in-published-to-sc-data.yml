@@ -20,30 +20,13 @@ jobs:
       PYTHON_VERSION: 3.7.5
         
     steps:
-      - name: Checkout ${{ env.FROM_REPO }} repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.FROM_REPO }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ env.FROM_REPO_BRANCH }}
-          fetch-depth: 2
-          path: from-repo
-
-      - name: Checkout ${{ env.TO_REPO }} repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.TO_REPO }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ env.TO_REPO_BRANCH }}
-          path: to-repo
-
       - name: Checkout ${{ env.TEST_REPO }} repo
         uses: actions/checkout@v2
         with:
           repository: ${{ env.TEST_REPO }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.TEST_REPO_BRANCH }}
-          path: test-repo
+          path: sc-renumber-segments
 
       - name: Setup Python
         uses: actions/setup-python@v2.2.1
@@ -59,37 +42,56 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
 
+      - name: Install sc-renumber-segments Python dependencies
+        run: pip install -r requirements.txt
+        working-directory: sc-renumber-segments
+
+      - name: Set up sutta-processor
+        run: pip install -e .
+        working-directory: sc-renumber-segments
+
+      - name: Checkout ${{ env.FROM_REPO }} repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.FROM_REPO }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ref: ${{ env.FROM_REPO_BRANCH }}
+          fetch-depth: 2
+          path: sc-renumber-segments/bilara-data
+
+      - name: Checkout ${{ env.TO_REPO }} repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.TO_REPO }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          ref: ${{ env.TO_REPO_BRANCH }}
+          path: sc-data
+
       - name: Install bilara-data Python dependencies
-        run: pip install -r from-repo/nilakkhana/requirements.txt
+        run: pip install -r requirements.txt
+        working-directory: sc-renumber-segments/bilara-data/nilakkhana
 
       - name: Get changed files
         id: changed-files
         run: echo ::set-output name=FILES::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
-        working-directory: from-repo
+        working-directory: bilara-data
 
       - name: Run Nilakkhana transform only on changed files
-        run: python nilakkhana/post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
-        working-directory: from-repo
-
-      - name: Install sc-renumber-segments Python dependencies
-        run: pip install -r test-repo/requirements.txt
-
-      - name: Set up sutta-processor
-        run: pip install -e .
-        working-directory: test-repo
+        run: python post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
+        working-directory: bilara-data/nilakkhana
 
       - name: Run sutta-processor
         run: sutta-processor -c check_only_changed_files_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
-        working-directory: test-repo
+        working-directory: sc-renumber-segments
 
       - name: Copy changed files to the target directory
         run: |
           for f in ${{ steps.changed-files.outputs.FILES }}
           do
             mkdir -p $TO_REPO_TARGET_FOLDER/$(dirname $f)
-            cp ../from-repo/$f $TO_REPO_TARGET_FOLDER/$(dirname $f)/
+            cp ../bilara-data/$f $TO_REPO_TARGET_FOLDER/$(dirname $f)/
           done
-        working-directory: to-repo
+        working-directory: sc-data
 
       - name: Push ${{ env.TO_REPO }}
         run: |
@@ -98,4 +100,4 @@ jobs:
           git add .
           git commit -m "From new test workflow"
           git push
-        working-directory: to-repo
+        working-directory: sc-data
