@@ -75,13 +75,12 @@ jobs:
         run: pip install -r test-repo/requirements.txt
 
       - name: Set up sutta-processor
-        run: |
-          pip install -e .
-          cp sc-renumber-segments/src/example_config.yaml .
+        run: pip install -e .
         working-directory: test-repo
 
       - name: Run sutta-processor
         run: sutta-processor -c check_only_changed_files_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
+        working-directory: test-repo
 
       - name: Copy changed files to the target directory
         run: |
