@@ -89,7 +89,7 @@ jobs:
           for f in ${{ steps.changed-files.outputs.FILES }}
           do
             mkdir -p $TO_REPO_TARGET_FOLDER/$(dirname $f)
-            cp ../bilara-data/$f $TO_REPO_TARGET_FOLDER/$(dirname $f)/
+            cp ../sc-renumber-segments/bilara-data/$f $TO_REPO_TARGET_FOLDER/$(dirname $f)/
           done
         working-directory: sc-data
 
