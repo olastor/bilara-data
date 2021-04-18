@@ -77,8 +77,8 @@ jobs:
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Run Nilakkhana transform only on changed files
-        run: python post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
-        working-directory: sc-renumber-segments/bilara-data/nilakkhana
+        run: python nilakkhana/post_checkout_parse.py -f ${{ steps.changed-files.outputs.FILES }}
+        working-directory: sc-renumber-segments/bilara-data
 
       - name: Run sutta-processor
         run: sutta-processor -c check_only_changed_files_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
