@@ -1,4 +1,4 @@
-name: Test new GitHub Action workflow
+name: Test only checking and pushing changed files
 
 on:
   push:
