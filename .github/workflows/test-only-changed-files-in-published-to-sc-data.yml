@@ -81,7 +81,7 @@ jobs:
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Run sutta-processor
-        run: sutta-processor -c check_only_changed_files_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
+        run: sutta-processor -c check_all_changes_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: sc-renumber-segments
 
       - name: Copy changed files to the target directory
