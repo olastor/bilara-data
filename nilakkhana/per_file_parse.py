@@ -19,10 +19,11 @@ def update_file_content(file_content: Dict[str, str]) -> Dict[str, str]:
 
 
 if __name__ == '__main__':
-    unfiltered_files = args.files
-    changed_files = [f for f in unfiltered_files if f.suffix == '.json']
-    print(f"Received changed files in Nilakkhana: {changed_files}")
-    for file in changed_files:
+    #unfiltered_files = args.files
+    #changed_files = [f for f in unfiltered_files if f.suffix == '.json']
+    print(f"Received changed files in Nilakkhana: {args.files}")
+    #for file in changed_files:
+    for file in args.files:
         print(f'{file} file in progress')
         with open(file, 'r+', encoding='utf-8') as target_file:
             data = json.load(target_file)
