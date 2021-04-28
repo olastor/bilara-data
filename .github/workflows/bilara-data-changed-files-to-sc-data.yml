@@ -1,4 +1,4 @@
-name: Test only checking and pushing changed files
+name: Test, transform, and move only files that have been changed
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - feature/bilara-to-sc-action
 
 jobs:
-  move-data-with-nilakkhana-transform:
+  test-transform-and-move-bilara-data-to-sc-data:
     runs-on: ubuntu-20.04
     
     env:

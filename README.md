@@ -184,3 +184,15 @@ an11.6:1.1": "etthantare pāṭho si, sya-all, km, pts-vp-pli1ed potthakesu na
 The reference files contain detailed references to over a dozen editions of the Pali canon. These were originally collated by the Dhamma Society for their Mahsaṅgīti edition, and have been supplemented by SuttaCentral.
 
 The full forms of the abbreviations may be found in `pali_edition.json`.
+
+## GitHub Action
+
+The GitHub Action found here `.github/workflows/bilara-data-changed-files-to-sc-data.yml` performs the following steps:
+1. clones the `suttacentral/sc-renumber-segments` repo
+2. clones the `suttacentral/bilara-data` repo
+3. clones the `suttacentral/sc-data` repo
+4. sets up the various dependencies
+5. gets the list of files that have been changed with the commit by calling `git diff-tree`
+6. runs Nilakkhana transform on those files
+7. passes those files to `sutta-processor`
+8. if there are no errors, then those files are pushed to the `sc-data` repo
