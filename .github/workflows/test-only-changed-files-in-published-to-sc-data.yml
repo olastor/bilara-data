@@ -50,14 +50,14 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-        - name: Cache pip
-          uses: actions/cache@v2
-          with:
-            path: ~/.cache/pip
-            key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-            restore-keys: |
-              ${{ runner.os }}-pip-
-              ${{ runner.os }}-
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
 
         - name: Install sc-renumber-segments Python dependencies
           run: pip install -r requirements.txt
