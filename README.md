@@ -196,5 +196,3 @@ The GitHub Action found here `.github/workflows/bilara-data-changed-files-to-sc-
 6. runs Nilakkhana transform on those files
 7. passes those files to `sutta-processor`
 8. if there are no errors, then those files are pushed to the `sc-data` repo
-
-Test line.

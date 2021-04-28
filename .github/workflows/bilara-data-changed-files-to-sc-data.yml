@@ -37,7 +37,13 @@ jobs:
           fetch-depth: 2
           path: sc-renumber-segments/bilara-data
 
+      - name: Get changed files
+        id: changed-files
+        run: echo ::set-output name=FILES::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        working-directory: sc-renumber-segments/bilara-data
+
       - name: Checkout ${{ env.TO_REPO }} repo
+        if: steps.changed-files.outputs.FILES
         uses: actions/checkout@v2
         with:
           repository: ${{ env.TO_REPO }}
@@ -46,11 +52,13 @@ jobs:
           path: sc-data
 
       - name: Setup Python
+        if: steps.changed-files.outputs.FILES
         uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Cache pip
+        if: steps.changed-files.outputs.FILES
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
@@ -58,21 +66,19 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
 
       - name: Install sc-renumber-segments Python dependencies
+        if: steps.changed-files.outputs.FILES
         run: pip install -r requirements.txt
         working-directory: sc-renumber-segments
 
       - name: Set up sutta-processor
+        if: steps.changed-files.outputs.FILES
         run: pip install -e .
         working-directory: sc-renumber-segments
 
       - name: Install bilara-data Python dependencies
+        if: steps.changed-files.outputs.FILES
         run: pip install -r requirements.txt
         working-directory: sc-renumber-segments/bilara-data/nilakkhana
-
-      - name: Get changed files
-        id: changed-files
-        run: echo ::set-output name=FILES::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
-        working-directory: sc-renumber-segments/bilara-data
 
       - name: Run Nilakkhana transform only on changed files
         if: steps.changed-files.outputs.FILES
