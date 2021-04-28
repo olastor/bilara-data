@@ -16,7 +16,7 @@ jobs:
       TO_REPO_BRANCH: research/test-for-pushing
       TO_REPO_TARGET_FOLDER: sc_bilara_data
       TEST_REPO: suttacentral/sc-renumber-segments
-      TEST_REPO_BRANCH: research/per-file-tests
+      TEST_REPO_BRANCH: feature/per-file-support
       PYTHON_VERSION: 3.7.5
         
     steps:
