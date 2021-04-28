@@ -28,28 +28,6 @@ jobs:
           ref: ${{ env.TEST_REPO_BRANCH }}
           path: sc-renumber-segments
 
-      - name: Setup Python
-        uses: actions/setup-python@v2.2.1
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('sutta_processor/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
-
-      - name: Install sc-renumber-segments Python dependencies
-        run: pip install -r requirements.txt
-        working-directory: sc-renumber-segments
-
-      - name: Set up sutta-processor
-        run: pip install -e .
-        working-directory: sc-renumber-segments
-
       - name: Checkout ${{ env.FROM_REPO }} repo
         uses: actions/checkout@v2
         with:
@@ -66,6 +44,28 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.TO_REPO_BRANCH }}
           path: sc-data
+
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+        - name: Cache pip
+          uses: actions/cache@v2
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
+              ${{ runner.os }}-
+
+        - name: Install sc-renumber-segments Python dependencies
+          run: pip install -r requirements.txt
+          working-directory: sc-renumber-segments
+
+        - name: Set up sutta-processor
+          run: pip install -e .
+          working-directory: sc-renumber-segments
 
       - name: Install bilara-data Python dependencies
         run: pip install -r requirements.txt
