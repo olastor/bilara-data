@@ -75,14 +75,17 @@ jobs:
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Run Nilakkhana transform only on changed files
+        if: steps.changed-files.outputs.FILES
         run: python nilakkhana/per_file_parse.py -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Run sutta-processor
+        if: steps.changed-files.outputs.FILES
         run: sutta-processor -c check_all_changes_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: sc-renumber-segments
 
       - name: Copy changed files to the target directory
+        if: steps.changed-files.outputs.FILES
         run: |
           for f in ${{ steps.changed-files.outputs.FILES }}
           do
@@ -92,6 +95,7 @@ jobs:
         working-directory: sc-data
 
       - name: Push ${{ env.TO_REPO }}
+        if: steps.changed-files.outputs.FILES
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
