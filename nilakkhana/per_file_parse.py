@@ -25,7 +25,7 @@ if __name__ == '__main__':
         with open(file, 'r+', encoding='utf-8') as target_file:
             data = json.load(target_file)
             data = update_file_content(data)
-            if file == 'root/pli/ms/sutta/an/an1/an1.628-637_root-pli-ms_test_1.json' or file == 'root/pli/ms/sutta/an/an1/an1.638-647_root-pli-ms_test_2.json':
+            if str(file) == 'root/pli/ms/sutta/an/an1/an1.628-637_root-pli-ms_test_1.json' or str(file) == 'root/pli/ms/sutta/an/an1/an1.638-647_root-pli-ms_test_2.json':
                 print(f'data={data}')
             target_file.seek(0)
             target_file.truncate()
