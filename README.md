@@ -189,10 +189,13 @@ The full forms of the abbreviations may be found in `pali_edition.json`.
 
 The GitHub Action found here `.github/workflows/bilara-data-changed-files-to-sc-data.yml` performs the following steps:
 1. clones the `suttacentral/sc-renumber-segments` repo
-2. clones the `suttacentral/bilara-data` repo into the `sc-renumber-segments` repo
-3. clones the `suttacentral/sc-data` repo
-4. sets up the various dependencies
-5. gets the list of files that have been changed with the commit by calling `git diff-tree` on the `bilara-data` repo
-6. runs Nilakkhana transform on those files
+2. gets a list of JSON files that have been changed in that commit (if there are any) by calling `git diff-tree` on the `bilara-data` repo
+3. clones the `suttacentral/bilara-data` repo into the `sc-renumber-segments` repo
+4. clones the `suttacentral/sc-data` repo
+5. sets up the various dependencies
+6. runs Nilakkhana transform on the files from step 2
 7. passes those files to `sutta-processor`
 8. if there are no errors, then those files are pushed to the `sc-data` repo
+
+The call to `git diff-tree` in step 2 filters out all files that are not JSON files. Since the only files that should be 
+pushed to `sc-data` are the JSNO files, if step 2 produces no output, then steps 3-8 will not be run.
