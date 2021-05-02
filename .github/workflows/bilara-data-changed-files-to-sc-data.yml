@@ -39,7 +39,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        run: echo ::set-output name=FILES::$(git diff-tree --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        run: echo ::set-output name=FILES::$(git diff-tree --diff-filter=ACMR --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Checkout ${{ env.TO_REPO }} repo
