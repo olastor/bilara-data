@@ -42,6 +42,11 @@ jobs:
         run: echo ::set-output name=FILES::$(git diff-tree --diff-filter=ACMR --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
+      - name: Get deleted files
+        id: deleted-files
+        run: echo ::set-output name=DELETED::$(git diff-tree --diff-filter=D --no-commit-id --name-only -r $GITHUB_SHA -- '*.json')
+        working-directory: sc-renumber-segments/bilara-data
+
       - name: Checkout ${{ env.TO_REPO }} repo
         if: steps.changed-files.outputs.FILES
         uses: actions/checkout@v2
@@ -100,12 +105,22 @@ jobs:
           done
         working-directory: sc-data
 
-      - name: Push ${{ env.TO_REPO }}
-        if: steps.changed-files.outputs.FILES
+      - name: Remove deleted files from ${{ env.TO_REPO }}
+        if: steps.deleted-files.outputs.DELETED
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git rm ${{ steps.deleted-files.outputs.DELETED }}
+          git commit -m "Updating sc-bilara-data from bilara-data with deleted files."
+          git push
+        working-directory: sc-data
+
+      - name: Push changed files to ${{ env.TO_REPO }}
+        if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "From new test workflow"
+          git commit -m "Updating sc-bilara-data from bilara-data with new or changed files."
           git push
         working-directory: sc-data
