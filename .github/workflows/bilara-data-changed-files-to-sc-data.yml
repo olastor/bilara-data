@@ -110,7 +110,11 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git rm ${{ steps.deleted-files.outputs.DELETED }}
+          for f in ${{ steps.deleted-files.outputs.DELETED }}
+          do
+            echo $(dirname $f)
+            git rm $(dirname $f)
+          done
           git commit -m "Updating sc-bilara-data from bilara-data with deleted files."
           git push
         working-directory: sc-data
