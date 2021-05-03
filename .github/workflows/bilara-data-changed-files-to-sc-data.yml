@@ -112,8 +112,7 @@ jobs:
           git config user.email github-actions@github.com
           for f in ${{ steps.deleted-files.outputs.DELETED }}
           do
-            echo $(dirname $f)
-            git rm $(dirname $f)
+            git rm TO_REPO_TARGET_FOLDER/$f
           done
           git commit -m "Updating sc-bilara-data from bilara-data with deleted files."
           git push
