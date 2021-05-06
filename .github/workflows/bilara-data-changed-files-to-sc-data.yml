@@ -48,7 +48,7 @@ jobs:
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Checkout ${{ env.TO_REPO }} repo
-        if: steps.changed-files.outputs.FILES
+        if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
         uses: actions/checkout@v2
         with:
           repository: ${{ env.TO_REPO }}
