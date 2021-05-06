@@ -119,7 +119,7 @@ jobs:
         working-directory: sc-data
 
       - name: Push changed files to ${{ env.TO_REPO }}
-        if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
+        if: steps.changed-files.outputs.FILES
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
