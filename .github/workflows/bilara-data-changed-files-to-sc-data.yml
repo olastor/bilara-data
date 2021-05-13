@@ -52,7 +52,7 @@ jobs:
         if: steps.changed-files.outputs.FILES
         id: overlapping-files
         run: |
-          for f in steps.changed-files.outputs.FILES:
+          for f in ${{ steps.changed-files.outputs.FILES }}:
             print(f)
         shell: python
 
