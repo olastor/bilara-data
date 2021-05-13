@@ -53,7 +53,7 @@ jobs:
         id: overlapping-files
         run: |
           for f in ${{ steps.changed-files.outputs.FILES }}:
-            print(f)
+            print($f)
         shell: python
 
 
