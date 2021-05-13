@@ -47,6 +47,12 @@ jobs:
         run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
+      - name: Setup Python
+        if: steps.changed-files.outputs.FILES
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
       - name: Remove files that were both deleted and changed
         # if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
         if: steps.changed-files.outputs.FILES
@@ -56,7 +62,6 @@ jobs:
             print($f)
         shell: python
 
-
       - name: Checkout ${{ env.TO_REPO }} repo
         if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
         uses: actions/checkout@v2
@@ -65,12 +70,6 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ env.TO_REPO_BRANCH }}
           path: sc-data
-
-      - name: Setup Python
-        if: steps.changed-files.outputs.FILES
-        uses: actions/setup-python@v2.2.1
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Cache pip
         if: steps.changed-files.outputs.FILES
