@@ -54,7 +54,7 @@ jobs:
           overlap=()
           for f in ${{ steps.deleted-files.outputs.DELETED }}
           do
-            if [contains(steps.changed-files.outputs.FILES, $f)]
+            if [contains(${{ steps.changed-files.outputs.FILES }}, $f)]
             then
               overlap+=($f)
             fi
