@@ -59,8 +59,7 @@ jobs:
         id: overlapping-files
         run: |
           results=python remove_overlapping_files -c ${{ steps.changed-files.outputs.FILES }} -d steps.deleted-files.outputs.DELETED
-          print(results)
-        shell: python
+          echo $results
         working-directory: sc-renumber-segments/bilara-data/.scripts
 
 
