@@ -47,6 +47,36 @@ jobs:
         run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
+      - name: Remove files that were both deleted and changed
+        if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
+        id: overlapping-files
+        run: |
+          overlap=()
+          for f in ${{ steps.deleted-files.outputs.DELETED }}
+          do
+            if contains(${{ steps.changed-files.outputs.FILES }}, $f); then
+              overlap+=($f)
+            fi
+          done
+          echo ::set-output name=OVERLAP::$(overlap)
+          filtered_changed_files=()
+          for f in ${{ steps.changed-files.outputs.FILES }}
+          do
+            if !contains(overlap, $f); then
+              filtered_changed_files+=($f)
+            fi
+          done
+          steps.changed-files.outputs.FILES=$(filtered_changed_files)
+          filtered_deleted_files=()
+          for f in ${{ steps.deleted-files.outputs.DELETED }}
+          do
+            if !contains(overlap, $f); then
+              filtered_deleted_files+=($f)
+            fi
+          done
+          steps.deleted-files.outputs.DELETED=$(filtered_deleted_files)
+
+
       - name: Checkout ${{ env.TO_REPO }} repo
         if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
         uses: actions/checkout@v2
