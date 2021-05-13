@@ -51,33 +51,9 @@ jobs:
         if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
         id: overlapping-files
         run: |
-          overlap=()
-          for f in ${{ steps.deleted-files.outputs.DELETED }}
-          do
-            if [contains(${{ steps.changed-files.outputs.FILES }}, $f)]
-            then
-              overlap+=($f)
-            fi
-          done
-          echo ::set-output name=OVERLAP::$(overlap)
-          filtered_changed_files=()
-          for f in ${{ steps.changed-files.outputs.FILES }}
-          do
-            if [!contains(overlap, $f)]
-            then
-              filtered_changed_files+=($f)
-            fi
-          done
-          steps.changed-files.outputs.FILES=$(filtered_changed_files)
-          filtered_deleted_files=()
-          for f in ${{ steps.deleted-files.outputs.DELETED }}
-          do
-            if [!contains(overlap, $f)]
-            then
-              filtered_deleted_files+=($f)
-            fi
-          done
-          steps.deleted-files.outputs.DELETED=$(filtered_deleted_files)
+          for f in steps.changed-files.outputs.FILES:
+            print(f)
+        shell: python
 
 
       - name: Checkout ${{ env.TO_REPO }} repo
