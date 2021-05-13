@@ -54,13 +54,13 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Remove files that were both deleted and changed
-        if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
-        # if: steps.changed-files.outputs.FILES
+        #if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
+        if: steps.changed-files.outputs.FILES
         id: overlapping-files
         run: |
-          results=python remove_overlapping_files -c ${{ steps.changed-files.outputs.FILES }} -d steps.deleted-files.outputs.DELETED
-          echo $results
-        working-directory: sc-renumber-segments/bilara-data/.scripts
+          for f in join(${{ steps.changed-files.outputs.FILES }}, ', '):
+            print(f)
+        shell: python
 
 
       - name: Checkout ${{ env.TO_REPO }} repo
