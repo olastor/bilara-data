@@ -54,7 +54,8 @@ jobs:
           overlap=()
           for f in ${{ steps.deleted-files.outputs.DELETED }}
           do
-            if contains(steps.changed-files.outputs.FILES, $f); then
+            if [contains(steps.changed-files.outputs.FILES, $f)]
+            then
               overlap+=($f)
             fi
           done
@@ -62,7 +63,8 @@ jobs:
           filtered_changed_files=()
           for f in ${{ steps.changed-files.outputs.FILES }}
           do
-            if !contains(overlap, $f); then
+            if [!contains(overlap, $f)]
+            then
               filtered_changed_files+=($f)
             fi
           done
@@ -70,7 +72,8 @@ jobs:
           filtered_deleted_files=()
           for f in ${{ steps.deleted-files.outputs.DELETED }}
           do
-            if !contains(overlap, $f); then
+            if [!contains(overlap, $f)]
+            then
               filtered_deleted_files+=($f)
             fi
           done
