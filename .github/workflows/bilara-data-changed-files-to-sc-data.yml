@@ -48,7 +48,8 @@ jobs:
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Remove files that were both deleted and changed
-        if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
+        # if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
+        if: steps.changed-files.outputs.FILES
         id: overlapping-files
         run: |
           for f in steps.changed-files.outputs.FILES:
