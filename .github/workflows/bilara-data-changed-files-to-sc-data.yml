@@ -58,7 +58,8 @@ jobs:
         if: steps.changed-files.outputs.FILES
         id: overlapping-files
         run: |
-          for f in join(${{ steps.changed-files.outputs.FILES }}, ', '):
+          changed = join(${{ steps.changed-files.outputs.FILES }}, ', ')
+          for f in changed:
             print(f)
         shell: python
 
