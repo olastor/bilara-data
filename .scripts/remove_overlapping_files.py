@@ -9,6 +9,8 @@ args = arg_parser.parse_args()
 
 
 def filter_overlapping_files(changed: List[Path], deleted: List[Path]) -> Dict[str, List[Path]]:
+    print(changed)
+    print(deleted)
     overlapping = []
     for p in deleted:
         if p in changed:

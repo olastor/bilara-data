@@ -58,7 +58,7 @@ jobs:
         if: steps.changed-files.outputs.FILES
         id: overlapping-files
         run: |
-          overlap=$(python remove_overlapping_files.py -c steps.changed-files.outputs.FILES -d steps.deleted-files.outputs.DELETED)
+          overlap=$(python remove_overlapping_files.py -c ${{ steps.changed-files.outputs.FILES }} -d ${{ steps.deleted-files.outputs.DELETED }})
           for f in $overlap
           do
             echo $f
