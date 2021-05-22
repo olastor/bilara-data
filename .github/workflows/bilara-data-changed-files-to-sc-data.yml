@@ -39,12 +39,12 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-status -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Get deleted files
         id: deleted-files
-        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-status -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Setup Python
@@ -52,18 +52,6 @@ jobs:
         uses: actions/setup-python@v2.2.1
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Remove files that were both deleted and changed
-        if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
-        id: overlapping-files
-        run: |
-          overlap=$(python remove_overlapping_files.py -c ${{ steps.changed-files.outputs.FILES }} -d ${{ steps.deleted-files.outputs.DELETED }})
-          for f in $overlap
-          do
-            echo $f
-          done
-        working-directory: sc-renumber-segments/bilara-data/.scripts
-
 
       - name: Checkout ${{ env.TO_REPO }} repo
         if: steps.changed-files.outputs.FILES || steps.deleted-files.outputs.DELETED
@@ -124,10 +112,13 @@ jobs:
           git config user.email github-actions@github.com
           for f in ${{ steps.deleted-files.outputs.DELETED }}
           do
-            git rm --ignore-unmatch $TO_REPO_TARGET_FOLDER/$f
+            removed=$(git rm --ignore-unmatch $TO_REPO_TARGET_FOLDER/$f)
           done
-          git commit -m "Updating sc-bilara-data from bilara-data with deleted files."
-          git push
+          if (( ${#removed[@]}>0 ))
+          then
+            git commit -m "Updating sc-bilara-data from bilara-data with deleted files."
+            git push
+          fi
         working-directory: sc-data
 
       - name: Push changed files to ${{ env.TO_REPO }}
