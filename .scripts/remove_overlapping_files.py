@@ -17,7 +17,8 @@ def filter_overlapping_files(changed: List[Path], deleted: List[Path]) -> Dict[s
     filtered_changed = [c for c in changed if c not in overlapping]
     filtered_deleted = [d for d in deleted if d not in overlapping]
 
-    return {'overlapping': overlapping, 'filtered_changed': filtered_changed, 'filtered_deleted': filtered_deleted}
+    # return {'overlapping': overlapping, 'filtered_changed': filtered_changed, 'filtered_deleted': filtered_deleted}
+    return overlapping
 
 
 if __name__ == '__main__':
