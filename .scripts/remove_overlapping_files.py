@@ -1,6 +1,6 @@
 import argparse
-from pathlib import Dict, Path
-from typing import List
+from pathlib import Path
+from typing import Dict, List
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('-c', '--changed', required=True, type=Path, nargs='*')
