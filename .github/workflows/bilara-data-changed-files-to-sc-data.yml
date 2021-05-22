@@ -44,7 +44,7 @@ jobs:
 
       - name: Get deleted files
         id: deleted-files
-        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-status -r ${{ github.event.before }} ${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-status -r ${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Setup Python
