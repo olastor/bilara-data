@@ -45,7 +45,7 @@ jobs:
           last_run_conclusion=$(echo $workflows | jq '.workflow_runs[1].conclusion')
           echo "Conclusion of last run:"
           echo $last_run_conclusion
-          if [[ "$last_run_conclusion" == "success" ]] || [[ "$last_run_conclusion" == "failure" ]]
+          if [[ "$last_run_conclusion" == "\"success\"" ]] || [[ "$last_run_conclusion" == "\"failure\"" ]]
           then
             commit_id=$(echo $workflows | jq '.workflow_runs[1].head_commit.id')
             echo $commit_id
