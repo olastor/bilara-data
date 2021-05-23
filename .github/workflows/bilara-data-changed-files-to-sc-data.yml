@@ -46,6 +46,10 @@ jobs:
           last_run_conclusion=$(echo $workflows | jq '.workflow_runs[1].conclusion')
           echo "Conclusion of last run:"
           echo $last_run_conclusion
+          if [[ "$last_run_conclusion" == "success" ]]
+          then
+            echo $(echo $workflows | jq '.workflow_runs[1].head_commit.id')
+          fi
 
 
       - name: Get changed files
