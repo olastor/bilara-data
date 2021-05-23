@@ -54,8 +54,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Remove files that were both deleted and changed
-        #if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
-        if: steps.changed-files.outputs.FILES
+        if: steps.changed-files.outputs.FILES && steps.deleted-files.outputs.DELETED
         id: overlapping-files
         run: |
           overlap=$(python remove_overlapping_files.py -c ${{ steps.changed-files.outputs.FILES }} -d ${{ steps.deleted-files.outputs.DELETED }})
