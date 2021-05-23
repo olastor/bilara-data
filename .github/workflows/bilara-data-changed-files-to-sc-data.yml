@@ -37,9 +37,16 @@ jobs:
           fetch-depth: 0
           path: sc-renumber-segments/bilara-data
 
+      - name: Get last workflow run
+        run: |
+          workflows=$(curl \
+          -H 'Accept: application/vnd.github.v3+json' \
+          "https://api.github.com/repos/dayunbao/bilara-data/actions/workflows/bilara-data-changed-files-to-sc-data.yml/runs?per_page=1")
+          echo $workflows
+
       - name: Get changed files
         id: changed-files
-        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMRU --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Get deleted files
