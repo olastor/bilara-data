@@ -18,6 +18,7 @@ jobs:
       TEST_REPO: suttacentral/sc-renumber-segments
       TEST_REPO_BRANCH: feature/per-file-support
       PYTHON_VERSION: 3.7.5
+      STARTING_COMMIT: ${{ github.event.before }}
         
     steps:
       - name: Checkout ${{ env.TEST_REPO }} repo
@@ -37,7 +38,7 @@ jobs:
           fetch-depth: 0
           path: sc-renumber-segments/bilara-data
 
-      - name: Get last workflow run
+      - name: Get commit ID of the last workflow run
         run: |
           workflows=$(curl \
           -H 'Accept: application/vnd.github.v3+json' \
@@ -48,18 +49,19 @@ jobs:
           if [[ "$last_run_conclusion" == "failure" ]]
           then
             commit_id=$(echo $workflows | jq -r '.workflow_runs[1].head_commit.id')
+            echo "STARTING_COMMIT=$commit_id" >> $GITHUB_ENV
             echo $commit_id
           fi
 
 
       - name: Get changed files
         id: changed-files
-        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ env.STARTING_COMMIT }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Get deleted files
         id: deleted-files
-        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ env.STARTING_COMMIT }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Setup Python
