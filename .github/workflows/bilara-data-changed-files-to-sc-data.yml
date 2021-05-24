@@ -50,7 +50,7 @@ jobs:
           then
             conclusion="success"
             id="id"
-            last_successfull_commit_id=$(echo $workflows | jq 'first(.workflow_runs[] | select(.conclusion == $conclusion)) | .head_commit[$id]')
+            last_successfull_commit_id=$(echo $workflows | jq -r "first(.workflow_runs[] | select(.conclusion == $conclusion)) | .head_commit[$id]")
             echo "STARTING_COMMIT=$last_successfull_commit_id" >> $GITHUB_ENV
             echo $last_successfull_commit_id
           fi
