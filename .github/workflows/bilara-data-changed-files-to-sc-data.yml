@@ -18,7 +18,8 @@ jobs:
       TEST_REPO: suttacentral/sc-renumber-segments
       TEST_REPO_BRANCH: feature/per-file-support
       PYTHON_VERSION: 3.7.5
-        
+      STARTING_COMMIT: ${{ github.event.before }}
+
     steps:
       - name: Checkout ${{ env.TEST_REPO }} repo
         uses: actions/checkout@v2
@@ -37,14 +38,30 @@ jobs:
           fetch-depth: 0
           path: sc-renumber-segments/bilara-data
 
+      - name: Get commit ID of the last workflow run
+        run: |
+          workflows=$(curl \
+          -H 'Accept: application/vnd.github.v3+json' \
+          "https://api.github.com/repos/suttacentral/bilara-data/actions/workflows/bilara-data-changed-files-to-sc-data.yml/runs)
+          last_run_conclusion=$(echo $workflows | jq -r '.workflow_runs[1].conclusion')
+          echo "Conclusion of last run:"
+          echo $last_run_conclusion
+          if [[ "$last_run_conclusion" == "failure" ]]
+          then
+            last_successfull_commit_id=$(echo $workflows | jq 'first(.workflow_runs[] | select(.conclusion == "success")) | .head_commit["id"]')
+            echo "STARTING_COMMIT=$last_successfull_commit_id" >> $GITHUB_ENV
+            echo $last_successfull_commit_id
+          fi
+
+
       - name: Get changed files
         id: changed-files
-        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=FILES::$(git diff --diff-filter=ACMR --no-commit-id --name-only -r ${{ env.STARTING_COMMIT }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Get deleted files
         id: deleted-files
-        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ github.event.before }}..${{ github.sha }} -- '*.json')
+        run: echo ::set-output name=DELETED::$(git diff --diff-filter=D --no-commit-id --name-only -r ${{ env.STARTING_COMMIT }}..${{ github.sha }} -- '*.json')
         working-directory: sc-renumber-segments/bilara-data
 
       - name: Setup Python
@@ -92,9 +109,7 @@ jobs:
 
       - name: Run sutta-processor
         if: steps.changed-files.outputs.FILES
-        run: |
-          result=$(sutta-processor -c check_all_changes_config.yaml -f ${{ steps.changed-files.outputs.FILES }})
-          echo $result
+        run: sutta-processor -c check_all_changes_config.yaml -f ${{ steps.changed-files.outputs.FILES }}
         working-directory: sc-renumber-segments
 
       - name: Copy changed files to the target directory
